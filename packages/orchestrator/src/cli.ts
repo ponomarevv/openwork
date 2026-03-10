@@ -530,7 +530,14 @@ async function resolveHostOpencodeGlobalConfigDir(): Promise<string | null> {
     candidates.push(join(homedir(), "Library", "Application Support", "opencode"));
   }
 
-  const files = ["opencode.jsonc", "opencode.json", "config.json", "AGENTS.md"];
+  const files = [
+    "opencode.jsonc",
+    "opencode.json",
+    join(".opencode", "opencode.jsonc"),
+    join(".opencode", "opencode.json"),
+    "config.json",
+    "AGENTS.md",
+  ];
   for (const candidate of Array.from(new Set(candidates.map((item) => resolve(expandTildePath(item)))))) {
     if (!(await isDir(candidate))) continue;
     for (const file of files) {

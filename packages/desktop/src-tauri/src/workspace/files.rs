@@ -420,10 +420,17 @@ pub fn ensure_workspace_files(workspace_path: &str, preset: &str) -> Result<(), 
 
     let config_path_jsonc = root.join("opencode.jsonc");
     let config_path_json = root.join("opencode.json");
+    let config_path_hidden_jsonc = root.join(".opencode").join("opencode.jsonc");
+    let config_path_hidden_json = root.join(".opencode").join("opencode.json");
+
     let config_path = if config_path_jsonc.exists() {
         config_path_jsonc
     } else if config_path_json.exists() {
         config_path_json
+    } else if config_path_hidden_jsonc.exists() {
+        config_path_hidden_jsonc
+    } else if config_path_hidden_json.exists() {
+        config_path_hidden_json
     } else {
         config_path_jsonc
     };
