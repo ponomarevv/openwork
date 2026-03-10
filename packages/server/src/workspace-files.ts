@@ -1,16 +1,21 @@
 import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 export function opencodeConfigPath(workspaceRoot: string): string {
-  const jsoncPath = join(workspaceRoot, "opencode.jsonc");
-  const jsonPath = join(workspaceRoot, "opencode.json");
-  const hiddenJsoncPath = join(workspaceRoot, ".opencode", "opencode.jsonc");
-  const hiddenJsonPath = join(workspaceRoot, ".opencode", "opencode.json");
+  const root = resolve(workspaceRoot);
+  const jsoncPath = join(root, "opencode.jsonc");
+  const jsonPath = join(root, "opencode.json");
+  const hiddenJsoncPath = join(root, ".opencode", "opencode.jsonc");
+  const hiddenJsonPath = join(root, ".opencode", "opencode.json");
 
   if (existsSync(jsoncPath)) return jsoncPath;
   if (existsSync(jsonPath)) return jsonPath;
   if (existsSync(hiddenJsoncPath)) return hiddenJsoncPath;
   if (existsSync(hiddenJsonPath)) return hiddenJsonPath;
+
+  if (existsSync(join(root, ".opencode"))) {
+    return hiddenJsoncPath;
+  }
 
   return jsoncPath;
 }

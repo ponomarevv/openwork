@@ -843,12 +843,19 @@ async function ensureWorkspace(workspace: string): Promise<string> {
 
   const configPathJsonc = join(resolved, "opencode.jsonc");
   const configPathJson = join(resolved, "opencode.json");
+  const hiddenJsonc = join(resolved, ".opencode", "opencode.jsonc");
+  const hiddenJson = join(resolved, ".opencode", "opencode.json");
+
   const hasJsonc = await fileExists(configPathJsonc);
   const hasJson = await fileExists(configPathJson);
+  const hasHiddenJsonc = await fileExists(hiddenJsonc);
+  const hasHiddenJson = await fileExists(hiddenJson);
 
-  if (!hasJsonc && !hasJson) {
+  if (!hasJsonc && !hasJson && !hasHiddenJsonc && !hasHiddenJson) {
+    const hiddenDir = join(resolved, ".opencode");
+    const targetPath = (await isDir(hiddenDir)) ? hiddenJsonc : configPathJsonc;
     const payload = JSON.stringify({ "$schema": "https://opencode.ai/config.json" }, null, 2);
-    await writeFile(configPathJsonc, `${payload}\n`, "utf8");
+    await writeFile(targetPath, `${payload}\n`, "utf8");
   }
 
   return resolved;

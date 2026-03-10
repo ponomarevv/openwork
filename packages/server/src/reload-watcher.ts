@@ -97,7 +97,15 @@ function startWorkspaceReloadWatcher(input: {
             return;
           }
 
-          if (name === "opencode.json" || name === "opencode.jsonc") {
+          const lowerName = name.toLowerCase();
+          if (
+            lowerName === "opencode.json" ||
+            lowerName === "opencode.jsonc" ||
+            lowerName.endsWith("/opencode.json") ||
+            lowerName.endsWith("/opencode.jsonc") ||
+            lowerName.endsWith("\\opencode.json") ||
+            lowerName.endsWith("\\opencode.jsonc")
+          ) {
             record("config", {
               type: "config",
               name,

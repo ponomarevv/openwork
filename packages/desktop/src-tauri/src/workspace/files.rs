@@ -398,6 +398,7 @@ fn seed_commands(commands_dir: &PathBuf, preset: &str) -> Result<(), String> {
 
 pub fn ensure_workspace_files(workspace_path: &str, preset: &str) -> Result<(), String> {
     let root = PathBuf::from(workspace_path);
+    let root = fs::canonicalize(&root).unwrap_or(root);
 
     let skill_root = root.join(".opencode").join("skills");
     fs::create_dir_all(&skill_root)
@@ -431,6 +432,8 @@ pub fn ensure_workspace_files(workspace_path: &str, preset: &str) -> Result<(), 
         config_path_hidden_jsonc
     } else if config_path_hidden_json.exists() {
         config_path_hidden_json
+    } else if root.join(".opencode").exists() {
+        config_path_hidden_jsonc
     } else {
         config_path_jsonc
     };

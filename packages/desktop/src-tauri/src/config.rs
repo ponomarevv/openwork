@@ -46,6 +46,14 @@ pub fn resolve_opencode_config_path(scope: &str, project_dir: &str) -> Result<Pa
         }
     }
 
+    if scope == "project" && !project_dir.trim().is_empty() {
+        let root = PathBuf::from(project_dir);
+        let root = fs::canonicalize(&root).unwrap_or(root);
+        if root.join(".opencode").exists() {
+            return Ok(root.join(".opencode").join("opencode.jsonc"));
+        }
+    }
+
     Ok(candidates[0].clone())
 }
 
